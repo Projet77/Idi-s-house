@@ -193,6 +193,28 @@ async function renderProductDetail(id) {
   }
   console.log('Product Data:', product);
 
+  // --- dynamic SEO Update ---
+  document.title = `${product.name} - Prix au Sénégal | Idi's House`;
+
+  // Meta Description
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (!metaDesc) {
+    metaDesc = document.createElement('meta');
+    metaDesc.name = "description";
+    document.head.appendChild(metaDesc);
+  }
+  metaDesc.content = `Achetez ${product.name} à ${formatCurrency(product.price)} FCFA sur Idi's House. ${product.description.substring(0, 100)}... Livraison rapide à Dakar et partout au Sénégal. Meilleur prix garanti.`;
+
+  // Meta Keywords
+  let metaKeywords = document.querySelector('meta[name="keywords"]');
+  if (!metaKeywords) {
+    metaKeywords = document.createElement('meta');
+    metaKeywords.name = "keywords";
+    document.head.appendChild(metaKeywords);
+  }
+  metaKeywords.content = `${product.name}, ${product.category}, prix ${product.name} Sénégal, achat ${product.name} Dakar, Idi's House, vente en ligne Sénégal`;
+  // --- End SEO Update ---
+
   document.getElementById('product-name').innerText = product.name;
   document.getElementById('breadcrumb-name').innerText = product.name;
 
