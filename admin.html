@@ -20,6 +20,8 @@
             <nav class="nav-menu">
                 <a href="#" class="nav-item active"><i class="fas fa-box"></i> Produits</a>
                 <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Retour au Site</a>
+                <a href="#" id="logoutBtn" class="nav-item" style="margin-top: auto; color: #e74c3c;"><i
+                        class="fas fa-sign-out-alt"></i> Déconnexion</a>
             </nav>
         </aside>
 
@@ -37,8 +39,17 @@
                     <p id="totalProducts">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Catégories</h3>
+                    <h3>Catégories Actives</h3>
                     <p id="totalCategories">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Visiteurs Aujourd'hui</h3>
+                    <p id="dailyVisits">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Produit Star 🌟</h3>
+                    <p id="topProduct" style="font-size: 1.2rem; margin-top: 10px;">-</p>
+                    <small id="topProductViews" style="color: #636e72;">0 vues</small>
                 </div>
             </div>
 
@@ -81,7 +92,24 @@
                         <option value="Salle de bain">Salle de bain</option>
                         <option value="Bureau">Bureau</option>
                         <option value="Décoration">Décoration</option>
-                        <option value="Éclairage">Éclairage</option>
+                        <option value="Éclairage">Lumière & Éclairage</option>
+                        <option value="Beauté">Beauté</option>
+                        <option value="Sport & Loisirs">Sport & Loisirs</option>
+                        <option value="Maison & Jardin">Maison & Jardin</option>
+                        <option value="Bijoux & Montres">Bijoux & Montres</option>
+                        <option value="Chaussures">Chaussures</option>
+                        <option value="Sacs">Sacs</option>
+                        <option value="Vêtements">Vêtements</option>
+                        <option value="Machines">Machines</option>
+                        <option value="Meubles">Meubles</option>
+                        <option value="Immobilier">Immobilier</option>
+                        <option value="Audio">Audio</option>
+                        <option value="Électronique">Électronique</option>
+                        <option value="Électroménager">Électroménager</option>
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                        <option value="Enfant">Enfant</option>
+                        <option value="Autres">Autres</option>
                     </select>
                 </div>
                 <div class="form-row">
@@ -92,6 +120,16 @@
                     <div class="form-group">
                         <label>Prix Original (FCFA)</label>
                         <input type="number" name="original_price">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Note (0-5)</label>
+                        <input type="number" name="rating" step="0.1" min="0" max="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Vendu (Qté)</label>
+                        <input type="number" name="sold" min="0">
                     </div>
                 </div>
                 <div class="form-group">

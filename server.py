@@ -8,11 +8,18 @@ import sys
 from email.parser import BytesParser
 from email import policy
 
+import uuid
+
 # Configuration
 START_PORT = 8000
 MAX_PORT_RETRIES = 10
 DATA_FILE = 'assets/data/products.json'
 UPLOAD_DIR = 'assets/images/uploads'
+ANALYTICS_FILE = 'assets/data/analytics.json'
+
+# In-memory session store
+# In a real app, use a database or Redis
+SESSIONS = set()
 
 # Ensure upload directory exists
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -28,12 +35,65 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         with open(DATA_FILE, 'w', encoding='utf-8') as f:
             json.dump(products, f, indent=2, ensure_ascii=False)
 
+    def _read_analytics(self):
+        if os.path.exists(ANALYTICS_FILE):
+            try:
+                with open(ANALYTICS_FILE, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except json.JSONDecodeError:
+                pass
+        return {"daily_visits": {}, "product_views": {}}
+
+    def _write_analytics(self, data):
+        with open(ANALYTICS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
     def _send_json_response(self, data, status=200):
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
         self.wfile.write(json.dumps(data).encode('utf-8'))
+
+    def do_GET(self):
+        if self.path == '/api/analytics/stats':
+            try:
+                from datetime import date
+                today = str(date.today())
+                
+                analytics = self._read_analytics()
+                products = self._read_products()
+                
+                # 1. Visits Today
+                visits_today = analytics.get("daily_visits", {}).get(today, 0)
+                
+                # 2. Top Product (Most Viewed)
+                top_product = None
+                product_views = analytics.get("product_views", {})
+                if product_views:
+                    # Find ID with max views
+                    top_id = max(product_views, key=product_views.get)
+                    max_views = product_views[top_id]
+                    
+                    # Get product details
+                    product_details = next((p for p in products if str(p['id']) == top_id), None)
+                    if product_details:
+                        top_product = {
+                            "name": product_details['name'],
+                            "views": max_views,
+                            "id": top_id
+                        }
+                
+                self._send_json_response({
+                    "status": "success",
+                    "today_visits": visits_today,
+                    "top_product": top_product
+                })
+            except Exception as e:
+                self._send_json_response({'status': 'error', 'message': str(e)}, 500)
+        else:
+             # Default behavior (serve files)
+             super().do_GET()
 
     def do_POST(self):
         if self.path == '/api/upload':
@@ -72,6 +132,55 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 import traceback
                 traceback.print_exc()
+                self._send_json_response({'status': 'error', 'message': str(e)}, 500)
+
+        elif self.path == '/api/login':
+            try:
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+                credentials = json.loads(post_data)
+                
+                email = credentials.get('email')
+                password = credentials.get('password')
+                
+                # Hardcoded credentials
+                if email == 'idishouse@ecom.sn' and password == '@e-commerce.sn':
+                    # Generate a secure session token
+                    token = str(uuid.uuid4())
+                    SESSIONS.add(token)
+                    self._send_json_response({'status': 'success', 'token': token})
+                else:
+                    self._send_json_response({'status': 'error', 'message': 'Email ou mot de passe incorrect'}, 401)
+                    
+            except Exception as e:
+                self._send_json_response({'status': 'error', 'message': str(e)}, 500)
+
+        elif self.path == '/api/verify_session':
+            try:
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                token = data.get('token')
+                
+                if token in SESSIONS:
+                    self._send_json_response({'status': 'success', 'message': 'Valid session'})
+                else:
+                    self._send_json_response({'status': 'error', 'message': 'Invalid session'}, 401)
+            except Exception as e:
+                self._send_json_response({'status': 'error', 'message': str(e)}, 500)
+
+        elif self.path == '/api/logout':
+            try:
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data)
+                token = data.get('token')
+                
+                if token in SESSIONS:
+                    SESSIONS.remove(token)
+                
+                self._send_json_response({'status': 'success'})
+            except Exception as e:
                 self._send_json_response({'status': 'error', 'message': str(e)}, 500)
 
         elif self.path == '/api/products':
@@ -153,10 +262,13 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 # Allow address reuse to prevent "Address already in use" errors on quick restarts
 socketserver.TCPServer.allow_reuse_address = True
 
+class ThreadingTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    daemon_threads = True
+
 def run_server():
     for port in range(START_PORT, START_PORT + MAX_PORT_RETRIES):
         try:
-            with socketserver.TCPServer(("", port), CustomHandler) as httpd:
+            with ThreadingTCPServer(("", port), CustomHandler) as httpd:
                 print(f"Serving at http://localhost:{port}")
                 print(f"Admin Dashboard: http://localhost:{port}/admin.html")
                 httpd.serve_forever()

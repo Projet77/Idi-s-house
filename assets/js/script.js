@@ -1,5 +1,17 @@
-const PRODUCTS_URL = './assets/data/products.json';
+const PRODUCTS_URL = './assets/data/products.json?t=' + new Date().getTime();
 const WHATSAPP_NUMBER = '221764297495'; // Make sure this matches user request
+
+// --- Analytics Tracking ---
+function trackVisit() {
+  const date = new Date().toISOString().split('T')[0];
+  fetch('/api/analytics/visit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ date: date })
+  }).catch(err => console.error("Analytics Error:", err));
+}
+document.addEventListener('DOMContentLoaded', trackVisit);
+// --------------------------
 
 // State
 let products = [];
@@ -59,11 +71,23 @@ function getCurrentProduct() {
 
 async function init() {
 
+  // --- Analytics: Product View Check ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('id');
+  if (productId) {
+    fetch('/api/analytics/view_product', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ product_id: productId })
+    }).catch(err => console.error("Analytics Error (View):", err));
+  }
+  // -------------------------------------
+
   await fetchProducts();
 
   // Search Logic
-  const params = new URLSearchParams(window.location.search);
-  const searchQuery = params.get('search');
+  // urlParams is already defined at top of init
+  const searchQuery = urlParams.get('search');
 
   if (searchQuery) {
     const term = searchQuery.toLowerCase();
@@ -98,7 +122,7 @@ async function init() {
   }
 
   // Product Detail Page
-  const productId = params.get('id');
+  // productId is already defined at the top of init()
   console.log('Init: Checking product page...', { productId, hasElementName: !!document.getElementById('product-name') });
 
   // Check for any unique element on the product page

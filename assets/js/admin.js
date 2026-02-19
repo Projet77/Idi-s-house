@@ -7,6 +7,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const addProductBtn = document.getElementById('addProductBtn');
     const closeModal = document.querySelector('.close-modal');
     const addProductForm = document.getElementById('addProductForm');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Helper to get cookie
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    // Check Authentication with Server
+    async function checkAuth() {
+        const token = getCookie('auth_token');
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            // Fetch Products with cache busting
+            const response = await fetch('/api/verify_session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: token })
+            });
+            const data = await response.json();
+            if (data.status !== 'success') {
+                window.location.href = 'login.html';
+            }
+        } catch (e) {
+            console.error("Auth check failed", e);
+            // Optional: redirect on error or allow retry
+        }
+    }
+    checkAuth();
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const token = getCookie('auth_token');
+
+            // Notify server
+            if (token) {
+                await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token })
+                });
+            }
+
+            // Clear cookie
+            document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = 'login.html';
+        });
+    }
 
     // Edit Mode Variables
     let isEditMode = false;
@@ -71,6 +135,26 @@ document.addEventListener('DOMContentLoaded', () => {
         totalProductsEl.textContent = products.length;
         const categories = new Set(products.map(p => p.category));
         totalCategoriesEl.textContent = categories.size;
+
+        // Fetch Analytics
+        fetch('/api/analytics/stats')
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Daily Visits
+                    document.getElementById('dailyVisits').textContent = data.today_visits;
+
+                    // Top Product
+                    if (data.top_product) {
+                        document.getElementById('topProduct').textContent = data.top_product.name;
+                        document.getElementById('topProductViews').textContent = data.top_product.views + ' vues';
+                    } else {
+                        document.getElementById('topProduct').textContent = '-';
+                        document.getElementById('topProductViews').textContent = '0 vues';
+                    }
+                }
+            })
+            .catch(err => console.error("Error fetching stats:", err));
     }
 
     function deleteProduct(id) {
@@ -121,6 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
         form.category.value = product.category;
         form.price.value = product.price;
         form.original_price.value = product.original_price || '';
+        form.rating.value = product.rating || 0;
+        form.sold.value = product.sold || 0;
         form.description.value = product.description;
 
         resetImageInputs();
@@ -216,8 +302,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 image: finalImages[0], // Main image for backward compatibility
                 images: finalImages,    // New array
                 description: formData.get('description'),
-                rating: 0,
-                sold: 0
+                rating: Number(formData.get('rating')),
+                sold: Number(formData.get('sold'))
             };
 
             let url = '/api/products';
@@ -226,8 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isEditMode && currentEditId) {
                 url = `/api/products/${currentEditId}`;
                 method = 'PUT';
-                delete productData.rating;
-                delete productData.sold;
             }
 
             const response = await fetch(url, {
