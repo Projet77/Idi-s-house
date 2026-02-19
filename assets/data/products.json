@@ -68,7 +68,7 @@
   {
     "id": 13,
     "name": "Brosse de shampoing massante",
-    "price": 2000,
+    "price": 2500,
     "original_price": 2000,
     "rating": 4,
     "sold": 213,
@@ -163,10 +163,10 @@
   {
     "id": 18,
     "name": "Lipgloss Tattoo kaufen",
-    "price": 0,
-    "original_price": 0,
-    "rating": 0,
-    "sold": 0,
+    "price": 3000,
+    "original_price": 3000,
+    "rating": 3.5,
+    "sold": 1987,
     "category": "Autres",
     "image": "assets/images/uploads/2758427f-b58e-4809-90b5-a1dd8644d075.jpg",
     "images": [
@@ -176,7 +176,7 @@
   },
   {
     "id": 19,
-    "name": "MorisMos Giant Teddy Bear 4 Feet, 47inch Stuffed Animal Big Teddy Bear Plush, Classic Girlfriend Boyfriend Gift on Birthday, Violet",
+    "name": "Peluche",
     "price": 0,
     "original_price": 0,
     "rating": 0,
@@ -186,7 +186,7 @@
     "images": [
       "assets/images/uploads/05da7590-fa54-47c2-9143-87f64d4bc477.jpg"
     ],
-    "description": "Description à mettre à jour."
+    "description": "MorisMos Giant Teddy Bear 4 Feet, 47inch Stuffed Animal Big Teddy Bear Plush, Classic Girlfriend Boyfriend Gift on Birthday, Violet"
   },
   {
     "id": 20,
