@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier - Idi's House</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/cart.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        .cart-wrapper {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">Idi's House</a>
+            <div class="search-wrapper">
+                <form class="search-form">
+                    <input type="text" class="search-input" placeholder="Je cherche...">
+                    <button type="submit" class="search-btn"><i class="ri-search-line"></i></button>
+                </form>
+            </div>
+            <div class="nav-actions">
+                <a href="about.html" class="nav-item">
+                    <span class="icon-large"><i class="ri-user-line"></i></span>
+                    <span>Compte</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="padding: 20px 0;">
+        <h1 style="font-size: 1.5rem; margin-bottom: 20px;">Panier ( <span class="cart-badge"
+                style="position:static; margin-left: 5px;">0</span> )</h1>
+
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <!-- Cart Items -->
+            <div class="cart-wrapper"
+                style="flex: 2; min-width: 300px; padding: 0; overflow: hidden; background: transparent; box-shadow: none;">
+                <div class="cart-table-wrapper">
+                    <div class="cart-header-grid">
+                        <div>Produit</div>
+                        <div>Prix</div>
+                        <div style="text-align: center;">Quantité</div>
+                        <div style="text-align: right;">Total</div>
+                        <div></div>
+                    </div>
+                    <div id="cart-items">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div style="flex: 1; min-width: 250px;">
+                <div class="cart-wrapper" style="position: sticky; top: 100px;">
+                    <h3 style="margin-bottom: 20px;">Résumé</h3>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Sous-total</span>
+                        <span id="cart-total" style="font-weight: bold;">0 F</span>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 20px; color: #666; font-size: 13px;">
+                        <span>Livraison</span>
+                        <span>À calculer</span>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.2rem; font-weight: 800; color: var(--primary-color);">
+                        <span>Total</span>
+                        <span id="cart-final-total">0 F</span>
+                        <!-- Using JS to update this too if separate ID needed, or same -->
+                    </div>
+
+                    <button onclick="checkoutWhatsApp()" class="btn"
+                        style="width: 100%; background: #25D366; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <i class="ri-whatsapp-line"></i> <span>Commander sur WhatsApp</span>
+                    </button>
+
+                    <div style="margin-top: 20px; text-align: center; font-size: 12px; color: #999;">
+                        Protection Acheteur <br> Remboursement intégral si non reçu
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <a href="index.html" class="logo" style="margin-bottom: 15px; display: block;">Idi's House</a>
+                    <p style="color: #636e72; font-size: 13px; line-height: 1.6; margin-bottom: 20px;">
+                        Votre destination pour le mobilier design et confort à Dakar. Qualité premium, prix accessibles.
+                    </p>
+                    <div class="social-links" style="display: flex; gap: 15px;">
+                        <a href="#"><i class="ri-facebook-fill" style="font-size: 1.2rem;"></i></a>
+                        <a href="#"><i class="ri-instagram-line" style="font-size: 1.2rem;"></i></a>
+                        <a href="#"><i class="ri-twitter-x-line" style="font-size: 1.2rem;"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="shop.html">Boutique</a></li>
+                        <li><a href="cart.html">Panier</a></li>
+                        <li><a href="about.html">À Propos</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Aide & Infos</h4>
+                    <ul>
+                        <li><a href="https://wa.me/221764297495" target="_blank"><i class="ri-whatsapp-line"></i>
+                                Service Client</a></li>
+                        <li><a href="#">Conditions Générales</a></li>
+                        <li><a href="#">Politique de Confidentialité</a></li>
+                        <li><a href="#">Mentions Légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 Idi's House - Fait avec <i class="ri-heart-fill" style="color: #ff7675;"></i> à Dakar.
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

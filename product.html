@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Produit - Idi's House</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=3">
+    <link rel="stylesheet" href="assets/css/standard_product.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">Idi's House</a>
+            <div class="search-wrapper">
+                <form class="search-form">
+                    <input type="text" class="search-input" placeholder="Rechercher...">
+                    <button type="submit" class="search-btn"><i class="ri-search-line"></i></button>
+                </form>
+            </div>
+            <div class="nav-actions">
+                <a href="shop.html" class="nav-item">
+                    <span class="icon-large"><i class="ri-store-2-line"></i></span>
+                    <span>Boutique</span>
+                </a>
+                <a href="cart.html" class="nav-item">
+                    <span class="icon-large" style="position: relative;">
+                        <i class="ri-shopping-cart-2-line"></i>
+                        <span class="cart-badge">0</span>
+                    </span>
+                    <span>Panier</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="product-container">
+
+        <!-- Visuals Column -->
+        <div class="product-gallery-wrapper">
+            <div class="main-image-frame">
+                <img id="product-image" src="" alt="Product" onclick="openLightbox(this.src)">
+            </div>
+            <div class="thumbnails-row">
+                <div class="thumb-item active" onclick="changeImage(this.querySelector('img').src)">
+                    <img id="thumb-1" src="" alt="">
+                </div>
+                <div class="thumb-item" onclick="changeImage(this.querySelector('img').src)">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=300&q=80"
+                        alt="">
+                </div>
+                <div class="thumb-item" onclick="changeImage(this.querySelector('img').src)">
+                    <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=300&q=80"
+                        alt="">
+                </div>
+                <div class="thumb-item" onclick="changeImage(this.querySelector('img').src)">
+                    <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=300&q=80"
+                        alt="">
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Column -->
+        <div class="product-info-wrapper">
+            <div class="breadcrumbs">
+                <a href="index.html">Accueil</a> / <a href="shop.html">Boutique</a> / <span
+                    id="breadcrumb-name">...</span>
+            </div>
+
+            <h1 class="product-title" id="product-name">Chargement...</h1>
+
+            <div class="product-meta">
+                <div class="rating-stars">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-half-fill"></i>
+                    <span style="color:#888; margin-left:5px;">(42 avis)</span>
+                </div>
+                <span class="stock-status" style="color: green; font-weight: 600;"><i
+                        class="ri-checkbox-circle-fill"></i> En Stock</span>
+            </div>
+
+            <div class="price-wrapper" id="product-price">
+                <!-- JS injected -->
+            </div>
+
+            <div class="variant-selector">
+                <span class="variant-label">Couleur</span>
+                <div class="color-list">
+                    <div class="color-circle active" style="background: #2d3436;" onclick="selectColor(this)"></div>
+                    <div class="color-circle" style="background: #dfe6e9;" onclick="selectColor(this)"></div>
+                    <div class="color-circle" style="background: #e17055;" onclick="selectColor(this)"></div>
+                </div>
+            </div>
+
+            <div class="variant-selector">
+                <span class="variant-label">Taille / Dimension</span>
+                <div class="size-list">
+                    <div class="size-box active" onclick="selectSize(this)">Standard</div>
+                    <div class="size-box" onclick="selectSize(this)">Large</div>
+                </div>
+            </div>
+
+            <div class="add-to-cart-wrapper">
+                <div class="qty-input-group">
+                    <button class="qty-btn" onclick="updateProductQty(-1)">-</button>
+                    <input type="text" id="qty-input" value="1" class="qty-value" readonly>
+                    <button class="qty-btn" onclick="updateProductQty(1)">+</button>
+                </div>
+                <button id="add-to-cart-btn" class="add-btn">Ajouter au panier</button>
+                <a onclick="buyNowWhatsApp()" class="whatsapp-link" title="Acheter sur WhatsApp"><i
+                        class="ri-whatsapp-line"></i></a>
+            </div>
+
+            <div class="info-accordions">
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        Description <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                    <div class="accordion-content open" id="product-description" style="display:block;">
+                        <!-- Description -->
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        Livraison & Retour <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                    <div class="accordion-content">
+                        Livraison gratuite partout à Dakar sous 24h. Retours acceptés sous 3 jours si le produit n'est
+                        pas utilisé.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="container" style="margin-bottom: 60px;">
+        <h3 style="font-size: 24px; margin-bottom: 30px; text-align: center;">Produits Similaires</h3>
+        <div id="featured-products" class="grid-container">
+            <!-- JS injected -->
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <a href="index.html" class="logo" style="margin-bottom: 15px; display: block;">Idi's House</a>
+                    <p style="color: #636e72; font-size: 13px;">Design & Qualité à Dakar.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 Idi's House
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js?v=3"></script>
+    <script>
+        // Inline script to handle accordions safely
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isOpen = content.style.display === 'block';
+
+            // Close all
+            document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
+
+            // Toggle current
+            if (!isOpen) {
+                content.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>
