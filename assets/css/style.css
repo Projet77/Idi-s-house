@@ -288,9 +288,17 @@ h6 {
 .product-title {
   color: var(--text-color);
   font-size: 14px;
-  height: 40px;
+  min-height: 40px;
+  /* Use min-height instead of fixed height */
   margin-bottom: 10px;
   font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  /* Limit to 2 lines */
+  line-clamp: 2;
+  /* Standard property */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .current-price {
