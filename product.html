@@ -119,15 +119,16 @@
                 </div>
             </div>
 
-            <div class="add-to-cart-wrapper">
+            <div class="product-actions-grid">
                 <div class="qty-input-group">
                     <button class="qty-btn" onclick="updateProductQty(-1)">-</button>
                     <input type="text" id="qty-input" value="1" class="qty-value" readonly>
                     <button class="qty-btn" onclick="updateProductQty(1)">+</button>
                 </div>
-                <button id="add-to-cart-btn" class="add-btn">Ajouter au panier</button>
-                <a onclick="buyNowWhatsApp()" class="whatsapp-link" title="Acheter sur WhatsApp"><i
-                        class="ri-whatsapp-line"></i></a>
+                <button id="add-to-cart-btn" class="add-btn secondary">Ajouter au panier</button>
+                <button onclick="buyNowWhatsApp()" class="whatsapp-btn-large">
+                    <i class="ri-whatsapp-line"></i> Commander maintenant
+                </button>
             </div>
 
             <div class="info-accordions">

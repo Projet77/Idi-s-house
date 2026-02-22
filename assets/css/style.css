@@ -338,6 +338,21 @@ h6 {
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+  transition: 0.3s;
+}
+
+.add-btn.secondary {
+  background: rgba(108, 92, 231, 0.1);
+  color: #6c5ce7;
+  box-shadow: none;
+  border: 1px solid rgba(108, 92, 231, 0.2);
+}
+
+.add-btn.small {
+  padding: 8px;
+  margin-top: 0;
+  width: auto;
+  border-radius: 10px;
 }
 
 .add-btn:hover {
@@ -415,6 +430,74 @@ input[type="number"] {
   border-radius: 4px;
   padding: 8px;
 }
+
+/* Action Grid Product Page */
+.product-actions-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 15px;
+  margin-top: 25px;
+  align-items: center;
+}
+
+.whatsapp-btn-large {
+  grid-column: 1 / -1;
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 15px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.3s;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.2);
+}
+
+.whatsapp-btn-large:hover {
+  background: #1ebc57;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(37, 211, 102, 0.3);
+}
+
+/* Card Actions Grid */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.whatsapp-btn-small {
+  flex: 1;
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: 0.2s;
+}
+
+.whatsapp-btn-small:hover {
+  background: #1ebc57;
+}
+
+@media (max-width: 480px) {
+  .product-actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {

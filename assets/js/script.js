@@ -176,7 +176,10 @@ function renderProducts(productsToRender, containerId) {
           <span class="rating">★ ${product.rating || '4.5'}</span>
           <span class="sold-count">${product.sold || '0'} vendus</span>
         </div>
-        <button class="add-btn" onclick="event.stopPropagation(); addToCart(${product.id})">Ajouter</button>
+        <div class="card-actions">
+          <button class="add-btn small" onclick="event.stopPropagation(); addToCart(${product.id})" title="Au panier"><i class="ri-shopping-cart-2-line"></i></button>
+          <button class="whatsapp-btn-small" onclick="event.stopPropagation(); buyProductNowWhatsApp(${product.id})" title="WhatsApp"><i class="ri-whatsapp-line"></i> Acheter</button>
+        </div>
       </div>
     </div>
   `}).join('');
@@ -225,7 +228,11 @@ async function renderProductDetail(id) {
   if (ogDesc) ogDesc.content = product.description.substring(0, 150) + '...';
 
   const ogImage = document.getElementById('og-image');
-  if (ogImage) ogImage.content = window.location.origin + '/' + product.image.replace(/^\.\//, '');
+  if (ogImage) {
+    // Ensure absolute URL for WhatsApp
+    let fullImagePath = product.image.replace(/^\.\//, '');
+    ogImage.content = window.location.origin + (window.location.origin.endsWith('/') ? '' : '/') + fullImagePath;
+  }
 
   const ogUrl = document.getElementById('og-url');
   if (ogUrl) ogUrl.content = window.location.href;
@@ -349,7 +356,17 @@ function buyNowWhatsApp() {
   const qty = qtyInput ? parseInt(qtyInput.value) : 1;
   const productUrl = window.location.href;
 
-  const msg = `Bonjour, je veux acheter: ${product.name} (x${qty}). Prix: ${formatCurrency(product.price * qty)}.\n\nLien du produit: ${productUrl}`;
+  const msg = `Bonjour Idi's House, je souhaite commander ce produit :\n\n📦 *${product.name}*\n🔢 Quantité : ${qty}\n💰 Prix total : ${formatCurrency(product.price * qty)}\n\n🔗 Lien : ${productUrl}`;
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+// Global function for grid buttons
+function buyProductNowWhatsApp(id) {
+  const product = products.find(p => p.id == id);
+  if (!product) return;
+  const productUrl = window.location.origin + '/product.html?id=' + id;
+  const msg = `Bonjour Idi's House, je souhaite commander ce produit :\n\n📦 *${product.name}*\n💰 Prix : ${formatCurrency(product.price)}\n\n🔗 Lien : ${productUrl}`;
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
