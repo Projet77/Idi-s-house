@@ -52,10 +52,13 @@ function switchTab(tabId) {
 }
 
 function buyNowWhatsApp() {
-  const product = getCurrentProduct(); // Need to ensure we have product context
+  const product = getCurrentProduct();
   if (!product) return;
-  const qty = document.getElementById('qty-input').value;
-  const msg = `Bonjour, je veux acheter: ${product.name} (x${qty}). Prix: ${formatCurrency(product.price * qty)}.`;
+  const qtyInput = document.getElementById('qty-input');
+  const qty = qtyInput ? parseInt(qtyInput.value) : 1;
+  const productUrl = window.location.href; // L'URL actuelle avec ID
+
+  const msg = `Bonjour, je veux acheter: ${product.name} (x${qty}). Prix: ${formatCurrency(product.price * qty)}.\n\nLien du produit: ${productUrl}`;
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
@@ -213,6 +216,21 @@ async function renderProductDetail(id) {
     document.head.appendChild(metaKeywords);
   }
   metaKeywords.content = `${product.name}, ${product.category}, prix ${product.name} Sénégal, achat ${product.name} Dakar, Idi's House, vente en ligne Sénégal`;
+
+  // --- WhatsApp & Facebook Open Graph Update ---
+  const ogTitle = document.getElementById('og-title');
+  if (ogTitle) ogTitle.content = `${product.name} - Idi's House`;
+
+  const ogDesc = document.getElementById('og-desc');
+  if (ogDesc) ogDesc.content = product.description.substring(0, 150) + '...';
+
+  const ogImage = document.getElementById('og-image');
+  if (ogImage) ogImage.content = window.location.origin + '/' + product.image.replace(/^\.\//, '');
+
+  const ogUrl = document.getElementById('og-url');
+  if (ogUrl) ogUrl.content = window.location.href;
+  // --- End Open Graph Update ---
+
   // --- End SEO Update ---
 
   document.getElementById('product-name').innerText = product.name;
@@ -329,7 +347,9 @@ function buyNowWhatsApp() {
   if (!product) return;
   const qtyInput = document.getElementById('qty-input');
   const qty = qtyInput ? parseInt(qtyInput.value) : 1;
-  const msg = `Bonjour, je veux acheter: ${product.name} (x${qty}). Prix: ${formatCurrency(product.price * qty)}.`;
+  const productUrl = window.location.href;
+
+  const msg = `Bonjour, je veux acheter: ${product.name} (x${qty}). Prix: ${formatCurrency(product.price * qty)}.\n\nLien du produit: ${productUrl}`;
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
